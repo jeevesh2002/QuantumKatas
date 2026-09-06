@@ -24,7 +24,13 @@ jobs:
 
       - name: Run DevSkim scanner
         uses: microsoft/DevSkim-Action@v1
-        
+        with:
+          # These exact data files contain public provenance hashes and defensive
+          # detection patterns, not application credentials or crypto operations.
+          # Keep the action's default exclusions and scan all other source files.
+          # https://github.com/microsoft/DevSkim-Action#ignore-globs
+          ignore-globs: "**/.git/**,**/bin/**,**/.github/codeguard/ci-provenance.json,**/.github/codeguard/ci-semgrep.yml"
+
       - name: Upload DevSkim scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v2
         with:
